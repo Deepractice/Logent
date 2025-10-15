@@ -1,0 +1,54 @@
+{
+  "name": "logent",
+  "version": "0.1.0",
+  "description": "AI-First logging library for intelligent agents - Log like you think",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "turbo build",
+    "test": "turbo test",
+    "test:dev": "turbo test:dev",
+    "test:ci": "turbo test:ci",
+    "lint": "turbo lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "turbo clean && rm -rf node_modules",
+    "typecheck": "turbo typecheck"
+  },
+  "keywords": [
+    "logger",
+    "logging",
+    "ai",
+    "agent",
+    "ai-first",
+    "observability",
+    "universal",
+    "typescript",
+    "monorepo"
+  ],
+  "author": "Deepractice",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Deepractice/Logent"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@10.15.1",
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@deepracticex/config-preset": "^0.1.0",
+    "@deepracticex/vitest-cucumber": "^1.2.0",
+    "@types/node": "^22.10.6",
+    "lefthook": "^1.13.6",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.6",
+    "turbo": "^2.5.8",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

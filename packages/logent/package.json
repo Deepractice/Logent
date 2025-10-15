@@ -1,0 +1,77 @@
+{
+  "name": "logent",
+  "version": "0.1.0",
+  "description": "AI-First logging library for intelligent agents - Universal, observable, and designed for the age of AI",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./nodejs": {
+      "types": "./dist/nodejs.d.ts",
+      "import": "./dist/nodejs.js",
+      "require": "./dist/nodejs.cjs"
+    },
+    "./cloudflare-workers": {
+      "types": "./dist/cloudflare-workers.d.ts",
+      "import": "./dist/cloudflare-workers.js",
+      "require": "./dist/cloudflare-workers.cjs"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.js",
+      "require": "./dist/browser.cjs"
+    },
+    "./test": {
+      "types": "./dist/test.d.ts",
+      "import": "./dist/test.js",
+      "require": "./dist/test.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rimraf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:dev": "vitest",
+    "test:ci": "vitest run --coverage"
+  },
+  "dependencies": {
+    "pino": "^9.9.0",
+    "pino-pretty": "^13.1.1"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "keywords": [
+    "logger",
+    "logging",
+    "ai",
+    "agent",
+    "ai-first",
+    "observability",
+    "universal",
+    "nodejs",
+    "cloudflare-workers",
+    "browser",
+    "test",
+    "vitest"
+  ],
+  "author": "Deepractice",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Deepractice/Logent"
+  },
+  "devDependencies": {
+    "@deepracticex/vitest-cucumber": "^1.2.0"
+  }
+}
