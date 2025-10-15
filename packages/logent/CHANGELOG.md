@@ -1,5 +1,11 @@
 # @deepracticex/logger
 
+## 1.1.1
+
+### Patch Changes
+
+- b0adef0: Setup CI/CD pipeline with GitHub Actions and configure automated release workflow
+
 ## 0.2.0
 
 ### Minor Changes
