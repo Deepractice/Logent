@@ -11,11 +11,13 @@ Feature: Test Environment Support
     Scenario: Auto-detect vitest environment
       Given VITEST environment variable is "true"
       When I create a logger without specifying environment
+      And I log "test message" at level "info"
       Then the logger should use test adapter
       And logs should be captured in memory
 
     Scenario: Explicitly specify test environment
       When I create a logger with environment "test"
+      And I log "test message" at level "info"
       Then the logger should use test adapter
       And logs should be captured in memory
 

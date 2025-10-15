@@ -19,7 +19,10 @@ Given("VITEST environment variable is set", function () {
 });
 
 Given("I have a test logger", function () {
-  this.logger = createLogger({ name: "test-app" });
+  this.logger = createLogger({
+    name: "test-app",
+    level: "trace"  // Capture all log levels including trace and debug
+  });
 });
 
 Given("I have a test logger with level {string}", function (level: string) {
@@ -52,6 +55,10 @@ When("I log a message", async function () {
 });
 
 When("I log an {string} message {string}", async function (level: string, message: string) {
+  await this.logger[level as keyof typeof this.logger](message);
+});
+
+When("I log {string} at level {string}", async function (message: string, level: string) {
   await this.logger[level as keyof typeof this.logger](message);
 });
 
@@ -126,11 +133,11 @@ Given('VITEST environment variable is "true"', function () {
 });
 
 Given("I have a test logger with default config", function () {
-  this.logger = createLogger({ name: "test-app" });
+  this.logger = createLogger({ name: "test-app", level: "trace" });
 });
 
 Given("I have a test logger with console enabled", function () {
-  this.logger = createLogger({ name: "test-app", console: true });
+  this.logger = createLogger({ name: "test-app", console: true, level: "trace" });
 });
 
 Given("vitest is running with default reporter", function () {
@@ -235,7 +242,8 @@ Then("logs should be captured in memory", function () {
 });
 
 Then("all standard log levels should be present", function () {
-  const levels = this.capturedLogs.map((log: CapturedLog) => log.level);
+  const logs = this.capturedLogs || getTestLogs();
+  const levels = logs.map((log: CapturedLog) => log.level);
   const expectedLevels = ["trace", "debug", "info", "warn", "error"];
   expectedLevels.forEach(level => {
     expect(levels).toContain(level);
@@ -243,11 +251,13 @@ Then("all standard log levels should be present", function () {
 });
 
 Then("captured log at index {int} should have level {string}", function (index: number, level: string) {
-  expect(this.capturedLogs[index].level).toBe(level);
+  const logs = this.capturedLogs || getTestLogs();
+  expect(logs[index].level).toBe(level);
 });
 
 Then("captured log at index {int} should have message {string}", function (index: number, message: string) {
-  expect(this.capturedLogs[index].message).toBe(message);
+  const logs = this.capturedLogs || getTestLogs();
+  expect(logs[index].message).toBe(message);
 });
 
 Then("each entry should have level, message, and timestamp", function () {
