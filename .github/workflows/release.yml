@@ -40,10 +40,11 @@ jobs:
         id: extract_version
         run: |
           # Get version from package.json
-          VERSION=$(jq -r '.version' package.json)
+          VERSION=$(jq -r '.version' packages/logent/package.json)
 
-          # Create release tag
-          TAG="v${VERSION}"
+          # Create release tag with timestamp
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          TAG="release-${TIMESTAMP}"
 
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
