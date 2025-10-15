@@ -118,17 +118,17 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build All Services
+      - name: Build All Packages
         run: pnpm build
 
       - name: Check Build Artifacts
         run: |
-          for service in services/*/dist; do
-            if [ -d "$service" ]; then
-              echo "✅ $(dirname $service) built successfully"
-              ls -la "$service"
+          for package in packages/logent/dist; do
+            if [ -d "$package" ]; then
+              echo "✅ Package built successfully"
+              ls -la "$package" | head -10
             else
-              echo "❌ $(dirname $service) build failed - no dist directory"
+              echo "❌ Package build failed - no dist directory"
               exit 1
             fi
           done

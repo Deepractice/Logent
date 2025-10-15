@@ -60,15 +60,15 @@ jobs:
         run: |
           # Create release notes
           cat > release-notes.md << 'NOTES_EOF'
-          # EdgeAuth ${{ steps.extract_version.outputs.version }}
+          # @deepracticex/logger ${{ steps.extract_version.outputs.version }}
 
           ## What's Changed
 
-          See [CHANGELOG.md](https://github.com/Deepractice/EdgeAuth/blob/main/CHANGELOG.md) for details.
+          See [CHANGELOG.md](https://github.com/Deepractice/Logent/blob/main/packages/logent/CHANGELOG.md) for details.
 
-          ## Deployment
+          ## Publishing
 
-          This release will be automatically deployed to Cloudflare Workers.
+          This release will be automatically published to npm.
 
           NOTES_EOF
 
@@ -84,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ steps.extract_version.outputs.tag }} \
-            --title "EdgeAuth ${{ steps.extract_version.outputs.version }}" \
+            --title "@deepracticex/logger ${{ steps.extract_version.outputs.version }}" \
             --notes "${{ steps.release_notes.outputs.notes }}" \
             --latest
 

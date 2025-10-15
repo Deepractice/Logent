@@ -1,0 +1,54 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: # Allow manual publishing
+
+jobs:
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Packages
+        run: pnpm build
+
+      - name: Run Tests
+        run: pnpm test:ci
+        env:
+          CI: true
+
+      - name: Publish @deepracticex/logger
+        working-directory: packages/logent
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publishing Summary
+        run: |
+          echo "## ✅ Published to NPM" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** @deepracticex/logger" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Links:**" >> $GITHUB_STEP_SUMMARY
+          echo "- [NPM Package](https://www.npmjs.com/package/@deepracticex/logger)" >> $GITHUB_STEP_SUMMARY
+          echo "- [GitHub Release](https://github.com/Deepractice/Logent/releases/latest)" >> $GITHUB_STEP_SUMMARY
