@@ -10,6 +10,7 @@ import {
   setWorldConstructor,
 } from "@deepracticex/vitest-cucumber";
 import { createWorld } from "./world.js";
+import { clearTestLogs } from "~/test.js";
 
 // Register World factory
 setWorldConstructor(createWorld);
@@ -23,10 +24,11 @@ AfterAll(async function () {
 });
 
 Before(async function () {
-  // Context is now shared between Background and Scenario (plugin 1.1.0+)
-  // No need to initialize here
+  // Clear global test logs before each scenario for proper isolation
+  clearTestLogs();
 });
 
 After(async function () {
-  // Cleanup happens automatically through World factory
+  // Cleanup after each scenario
+  clearTestLogs();
 });

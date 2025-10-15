@@ -2,8 +2,8 @@
  * Test environment entry point
  * Provides in-memory logger for testing with inspection utilities
  */
-import { createLogger } from "~/api/logger.js";
 import type { LoggerConfig } from "~/types/index.js";
+import { createTestLogger as createTestLoggerAdapter } from "~/core/test-adapter.js";
 
 // Export test utilities
 export {
@@ -16,17 +16,22 @@ export {
 
 /**
  * Create a test logger instance
- * Automatically uses test adapter with in-memory capture
+ * Uses synchronous test adapter for immediate log capture
  */
 export function createTestLogger(config: LoggerConfig = {}): any {
-  return createLogger({
+  return createTestLoggerAdapter(config);
+}
+
+/**
+ * Create a logger for test environment
+ * This is the main export that tests should use
+ */
+export function createLogger(config: LoggerConfig = {}): any {
+  return createTestLoggerAdapter({
     ...config,
     environment: "test",
   });
 }
-
-// Re-export the standard createLogger for convenience
-export { createLogger };
 
 // Re-export types
 export type { LoggerConfig, Logger, LogLevel } from "~/types/index.js";

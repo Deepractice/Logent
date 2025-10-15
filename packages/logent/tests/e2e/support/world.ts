@@ -9,6 +9,8 @@ export interface LoggerWorld {
   logger?: Logger;
   logRecords: any[];
   lastLog?: any;
+  capturedLogs?: any[];
+  testMode?: string;
 
   // Generic context
   context: Record<string, any>;

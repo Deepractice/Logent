@@ -4,46 +4,18 @@
 
 import { Given, When, Then, DataTable } from "@deepracticex/vitest-cucumber";
 import { expect } from "vitest";
-import { createLogger } from "~/index.js";
+import { createLogger, getTestLogs, clearTestLogs } from "~/test.js";
 import type { LoggerWorld } from "../support/world.js";
 
 // Given steps
 Given("I have a logger instance", function (this: LoggerWorld) {
-  // Initialize logger with log capture
-  const capturedLogs: any[] = [];
-  const logger = createLogger({
+  this.logger = createLogger({
+    name: "test-logger",
     console: false,
-    file: false,
+    level: "trace", // Capture all log levels including debug and trace
   });
-
-  // Intercept log methods to capture output
-  const originalInfo = logger.info.bind(logger);
-  const originalWarn = logger.warn.bind(logger);
-  const originalError = logger.error.bind(logger);
-  const originalDebug = logger.debug.bind(logger);
-
-  logger.info = (...args: any[]) => {
-    capturedLogs.push({ level: "info", args });
-    return originalInfo(...args);
-  };
-
-  logger.warn = (...args: any[]) => {
-    capturedLogs.push({ level: "warn", args });
-    return originalWarn(...args);
-  };
-
-  logger.error = (...args: any[]) => {
-    capturedLogs.push({ level: "error", args });
-    return originalError(...args);
-  };
-
-  logger.debug = (...args: any[]) => {
-    capturedLogs.push({ level: "debug", args });
-    return originalDebug(...args);
-  };
-
-  this.logger = logger;
-  this.logRecords = capturedLogs;
+  // Use test adapter's global capture via getTestLogs()
+  this.logRecords = []; // Keep for backward compatibility
 });
 
 // When steps
@@ -65,7 +37,6 @@ When(
         logger.debug(message);
         break;
     }
-    this.lastLog = this.logRecords[this.logRecords.length - 1];
   },
 );
 
@@ -89,20 +60,19 @@ When(
     const logger = this.logger!;
     switch (level) {
       case "info":
-        logger.info(message, context);
+        logger.info(context, message);
         break;
       case "warn":
-        logger.warn(message, context);
+        logger.warn(context, message);
         break;
       case "error":
-        logger.error(message, context);
+        logger.error(context, message);
         break;
       case "debug":
-        logger.debug(message, context);
+        logger.debug(context, message);
         break;
     }
 
-    this.lastLog = this.logRecords[this.logRecords.length - 1];
     this.set("logContext", context);
   },
 );
@@ -110,42 +80,12 @@ When(
 When(
   "I create a logger with name {string}",
   function (this: LoggerWorld, packageName: string) {
-    // Create a new logger with custom package name
-    const capturedLogs: any[] = [];
-    const logger = createLogger({
+    this.logger = createLogger({
       name: packageName,
       console: false,
-      file: false,
+      level: "trace", // Capture all log levels
     });
-
-    // Intercept log methods
-    const originalInfo = logger.info.bind(logger);
-    const originalWarn = logger.warn.bind(logger);
-    const originalError = logger.error.bind(logger);
-    const originalDebug = logger.debug.bind(logger);
-
-    logger.info = (...args: any[]) => {
-      capturedLogs.push({ level: "info", args });
-      return originalInfo(...args);
-    };
-
-    logger.warn = (...args: any[]) => {
-      capturedLogs.push({ level: "warn", args });
-      return originalWarn(...args);
-    };
-
-    logger.error = (...args: any[]) => {
-      capturedLogs.push({ level: "error", args });
-      return originalError(...args);
-    };
-
-    logger.debug = (...args: any[]) => {
-      capturedLogs.push({ level: "debug", args });
-      return originalDebug(...args);
-    };
-
-    this.logger = logger;
-    this.logRecords = capturedLogs;
+    this.logRecords = []; // Keep for backward compatibility
     this.set("packageName", packageName);
   },
 );
@@ -155,30 +95,34 @@ When("I log a message from a function", function (this: LoggerWorld) {
     this.logger!.info("Message from function");
   };
   logFromFunction();
-  this.lastLog = this.logRecords[this.logRecords.length - 1];
 });
 
 // Then steps
 Then(
   "the log should be recorded at level {string}",
   function (this: LoggerWorld, expectedLevel: string) {
-    expect(this.lastLog).to.exist;
-    expect(this.lastLog.level).to.equal(expectedLevel);
+    const logs = getTestLogs();
+    expect(logs.length).toBeGreaterThan(0);
+    const lastLog = logs[logs.length - 1];
+    expect(lastLog.level).toBe(expectedLevel);
   },
 );
 
 Then(
   "the log message should be {string}",
   function (this: LoggerWorld, expectedMessage: string) {
-    expect(this.lastLog).to.exist;
-    const message = this.lastLog.args[0];
-    expect(message).to.equal(expectedMessage);
+    const logs = getTestLogs();
+    expect(logs.length).toBeGreaterThan(0);
+    const lastLog = logs[logs.length - 1];
+    expect(lastLog.message).toBe(expectedMessage);
   },
 );
 
 Then("the log should include context data", function (this: LoggerWorld) {
-  expect(this.lastLog).to.exist;
-  expect(this.lastLog.args.length).to.be.greaterThan(1);
+  const logs = getTestLogs();
+  expect(logs.length).toBeGreaterThan(0);
+  const lastLog = logs[logs.length - 1];
+  expect(lastLog.context).toBeDefined();
 });
 
 Then(
@@ -197,22 +141,24 @@ Then(
 );
 
 Then("the log should include caller location", function (this: LoggerWorld) {
-  // This is tested by the logger implementation
-  // Actual verification would require inspecting pino output
-  expect(this.lastLog).to.exist;
+  const logs = getTestLogs();
+  expect(logs.length).toBeGreaterThan(0);
 });
 
 Then("the location should include filename", function (this: LoggerWorld) {
-  expect(this.lastLog).to.exist;
+  const logs = getTestLogs();
+  expect(logs.length).toBeGreaterThan(0);
 });
 
 Then("the location should include line number", function (this: LoggerWorld) {
-  expect(this.lastLog).to.exist;
+  const logs = getTestLogs();
+  expect(logs.length).toBeGreaterThan(0);
 });
 
 Then(
   "the log location should match format {string}",
   function (this: LoggerWorld, _format: string) {
-    expect(this.lastLog).to.exist;
+    const logs = getTestLogs();
+    expect(logs.length).toBeGreaterThan(0);
   },
 );
