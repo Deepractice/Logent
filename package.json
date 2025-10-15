@@ -1,7 +1,7 @@
 {
-  "name": "logent",
+  "name": "@deepractice/logent",
   "version": "0.1.0",
-  "description": "AI-First logging library for intelligent agents - Log like you think",
+  "description": "Logent - AI-First logging library for intelligent agents (Repository)",
   "private": true,
   "type": "module",
   "scripts": {

@@ -1,0 +1,19 @@
+{
+  "name": "logent",
+  "version": "0.0.1",
+  "description": "Placeholder for Logent - AI-First logging library. Use @deepracticex/logger for now.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Deepractice/Logent"
+  },
+  "keywords": [
+    "placeholder",
+    "logent",
+    "logger",
+    "ai",
+    "agent"
+  ],
+  "author": "Deepractice",
+  "license": "MIT"
+}
