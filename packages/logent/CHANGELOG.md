@@ -1,5 +1,11 @@
 # @deepracticex/logger
 
+## 1.1.2
+
+### Patch Changes
+
+- 5816459: Complete CI/CD pipeline setup with automated testing and publishing
+
 ## 1.1.1
 
 ### Patch Changes
