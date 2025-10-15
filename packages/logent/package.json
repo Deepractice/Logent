@@ -1,6 +1,6 @@
 {
   "name": "@deepracticex/logger",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "AI-First logging library for intelligent agents - Universal, observable, and designed for the age of AI",
   "type": "module",
   "main": "./dist/index.js",
